@@ -9,7 +9,7 @@ export const gameSchema = joi.object({
 
 export const clientSchema = joi.object({
   name: joi.string().required(),
-  phone: joi.string().alphanum().min(10).max(11).required(),
-  cpf: joi.string().alphanum().length(11).required(),
+  phone: joi.string().min(10).max(11).pattern(/^\d+$/).required(),
+  cpf: joi.string().length(10).pattern(/^\d+$/).required(),
   birthday: joi.date().iso().required(),
 });
