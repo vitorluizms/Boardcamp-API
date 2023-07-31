@@ -42,14 +42,16 @@ export async function getRentals(req, res) {
         JOIN customers ON rentals."customerId" = customers.id 
         JOIN games ON rentals."gameId" = games.id;`
     );
-    const date = result.rows.rentDate
     const rentals = result.rows.map((element) => {
-      console.log(element)
+      const date = new Date(element.rentDate);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1)
+      const day = String(date.getDate())
       return {
         id: element.id,
         customerId: element.customerId,
         gameId: element.daysRented,
-        rentDate: date,
+        rentDate: `${year}-${month}-${day}`,
         returnDate: element.returnDate,
         originalPrice: element.originalPrice,
         delayFee: element.delayFee,
