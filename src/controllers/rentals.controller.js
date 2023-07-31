@@ -38,11 +38,32 @@ export async function createRental(req, res) {
 export async function getRentals(req, res) {
   try {
     const result = await db.query(
-      `SELECT rentals.*, customers.id AS customer_id, customers.name AS customers_name, games.id AS game_id, games.name AS game_name FROM rentals
+      `SELECT rentals.*, customers.id AS customer_id, customers.name AS customer_name, games.id AS game_id, games.name AS game_name FROM rentals
         JOIN customers ON rentals."customerId" = customers.id 
         JOIN games ON rentals."gameId" = games.id;`
     );
-    res.status(200).send(result.rows);
+    const date = result.rows.rentDate
+    const rentals = result.rows.map((element) => {
+      console.log(element)
+      return {
+        id: element.id,
+        customerId: element.customerId,
+        gameId: element.daysRented,
+        rentDate: date,
+        returnDate: element.returnDate,
+        originalPrice: element.originalPrice,
+        delayFee: element.delayFee,
+        customer: {
+          id: element.customer_id,
+          name: element.customer_name,
+        },
+        game: {
+          id: element.game_id,
+          name: element.game_name,
+        },
+      };
+    });
+    res.status(200).send(rentals);
   } catch (err) {
     res.status(500).send(err.message);
   }

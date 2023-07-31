@@ -23,7 +23,8 @@ export async function validateUpdate(req, res, next) {
       `SELECT * FROM customers WHERE cpf = $1;`,
       [cpf]
     );
-    if ((cpfValidate.rowCount > 0) & (cpfValidate.id != id))
+    console.log(cpfValidate)
+    if ((cpfValidate.rowCount > 0) & (cpfValidate.rows[0].id != id))
       return res.status(409).send("CPF already exists");
     next();
   } catch (err) {
