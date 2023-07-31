@@ -32,3 +32,23 @@ export async function validateUpdate(req, res, next) {
     res.status(500).send(err.message);
   }
 }
+
+export async function validateId(req, res, next) {
+  const { id } = req.params;
+  try {
+    const rental = await db.query(
+      `SELECT TO_CHAR(rentals."rentDate", 'YYYY-MM-DD') AS "rentDate", rentals."daysRented", rentals."returnDate", 
+      rentals."delayFee", rentals."originalPrice"
+      FROM rentals WHERE id = $1;`,
+      [id]
+    );
+
+    if (rental.rowCount === 0)
+      return res.status(404).send("Rental doesn't exists");
+
+    res.locals.rental = rental;
+    next();
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+}

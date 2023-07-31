@@ -27,7 +27,7 @@ export async function createRental(req, res) {
       return res.status(400).send("Game out of stock");
 
     await db.query(
-      `INSERT INTO rentals ("customerId", "gameId", "daysRented", "rentDate", "returnDate", "delayFee") VALUES ($1, $2, $3, CURRENT_DATE, null, $4, null);`,
+      `INSERT INTO rentals ("customerId", "gameId", "daysRented", "rentDate", "originalPrice", "returnDate", "delayFee") VALUES ($1, $2, $3, CURRENT_DATE, null, $4, null);`,
       [customerId, gameId, daysRented, game.pricePerDay * daysRented]
     );
     res.sendStatus(201);
@@ -75,17 +75,8 @@ export async function getRentals(req, res) {
 
 export async function finishRental(req, res) {
   const { id } = req.params;
+  const { rental } = res.locals;
   try {
-    const rental = await db.query(
-      `SELECT TO_CHAR(rentals."rentDate", 'YYYY-MM-DD') AS "rentDate", rentals."daysRented", rentals."returnDate", 
-      rentals."delayFee", rentals."originalPrice"
-      FROM rentals WHERE id = $1;`,
-      [id]
-    );
-
-    if (rental.rowCount === 0)
-      return res.status(404).send("Rental doesn't exists");
-
     if (rental.rows[0].returnDate !== null)
       return res.status(400).send("Rental already finished");
 
