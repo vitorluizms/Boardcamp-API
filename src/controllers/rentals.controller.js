@@ -45,8 +45,8 @@ export async function getRentals(req, res) {
     const rentals = result.rows.map((element) => {
       const date = new Date(element.rentDate);
       const year = date.getFullYear();
-      const month = String(date.getMonth() + 1)
-      const day = String(date.getDate())
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
       return {
         id: element.id,
         customerId: element.customerId,
