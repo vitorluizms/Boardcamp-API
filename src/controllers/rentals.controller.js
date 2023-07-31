@@ -50,8 +50,8 @@ export async function getRentals(req, res) {
       return {
         id: element.id,
         customerId: element.customerId,
-        gameId: element.daysRented,
-        rentDate: element.rentDate,
+        gameId: element.gameId,
+        rentDate: `${year}-${month}-${day}`,
         daysRented: element.daysRented,
         returnDate: element.returnDate,
         originalPrice: element.originalPrice,
@@ -66,7 +66,7 @@ export async function getRentals(req, res) {
         },
       };
     });
-    res.status(200).send(rentals);
+    res.status(200).send(result);
   } catch (err) {
     res.status(500).send(err.message);
   }
