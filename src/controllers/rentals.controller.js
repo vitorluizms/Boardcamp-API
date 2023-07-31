@@ -66,7 +66,7 @@ export async function getRentals(req, res) {
         },
       };
     });
-    res.status(200).send(result);
+    res.status(200).send(rentals);
   } catch (err) {
     res.status(500).send(err.message);
   }
