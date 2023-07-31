@@ -27,7 +27,7 @@ export async function createRental(req, res) {
       return res.status(400).send("Game out of stock");
 
     await db.query(
-      `INSERT INTO rentals ("customerId", "gameId", "daysRented", "rentDate", "originalPrice", "returnDate", "delayFee") VALUES ($1, $2, $3, CURRENT_DATE, null, $4, null);`,
+      `INSERT INTO rentals ("customerId", "gameId", "daysRented", "rentDate", "originalPrice", "returnDate", "delayFee") VALUES ($1, $2, $3, CURRENT_DATE, $4, null, null);`,
       [customerId, gameId, daysRented, game.pricePerDay * daysRented]
     );
     res.sendStatus(201);
