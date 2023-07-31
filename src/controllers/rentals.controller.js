@@ -88,10 +88,14 @@ export async function finishRental(req, res) {
 
     await db.query(
       `UPDATE rentals SET "returnDate" = $1, "delayFee" = $2 WHERE id = $3;`,
-      [day.format("YYYY-MM-DD"), pricePerDay * delay, id]
+      [day.format("YYYY-MM-DD"), delay > 0 ? (pricePerDay * delay) : 0, id]
     );
     res.sendStatus(200);
   } catch (err) {
     res.status(500).send(err.message);
   }
+}
+
+export async function deleteRental(req, res) {
+  const { rental } = res.locals.rental
 }
