@@ -26,10 +26,23 @@ export async function createRental(req, res) {
       return res.status(400).send("Game out of stock");
 
     await db.query(
-      `INSERT INTO rentals ("customerId", "gameId", "daysRented", "rentDate", "returnDate", "originalPrice", "delayFee") VALUES ($1, $2, $3, CURRENT_DATE, null, $4, null)`,
+      `INSERT INTO rentals ("customerId", "gameId", "daysRented", "rentDate", "returnDate", "originalPrice", "delayFee") VALUES ($1, $2, $3, CURRENT_DATE, null, $4, null);`,
       [customerId, gameId, daysRented, game.pricePerDay * daysRented]
     );
     res.sendStatus(201);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+}
+
+export async function getRentals(req, res) {
+  try {
+    const result = await db.query(
+      `SELECT rentals.*, customers.id AS customer_id, customers.name AS customers_name, games.id AS game_id, games.name AS game_name FROM rentals
+        JOIN customers ON rentals."customerId" = customers.id 
+        JOIN games ON rentals."gameId" = games.id;`
+    );
+    res.status(200).send(result.rows);
   } catch (err) {
     res.status(500).send(err.message);
   }
