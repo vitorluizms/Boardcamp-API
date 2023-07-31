@@ -52,6 +52,7 @@ export async function getRentals(req, res) {
         customerId: element.customerId,
         gameId: element.daysRented,
         rentDate: `${year}-${month}-${day}`,
+        daysRented: element.daysRented,
         returnDate: element.returnDate,
         originalPrice: element.originalPrice,
         delayFee: element.delayFee,
